@@ -5,12 +5,17 @@ import { ChatMessage } from '@/lib/types'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
 
-export default function ChatInterface() {
+interface ChatInterfaceProps {
+    initialQuestion?: string | null
+}
+
+export default function ChatInterface({ initialQuestion }: ChatInterfaceProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const [input, setInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const messagesEndRef = useRef<HTMLDivElement>(null)
+    const initialQuestionSent = useRef(false)
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -20,13 +25,21 @@ export default function ChatInterface() {
         scrollToBottom()
     }, [messages])
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!input.trim() || isLoading) return
+    useEffect(() => {
+        if (initialQuestion && !initialQuestionSent.current) {
+            initialQuestionSent.current = true
+            handleSubmit(undefined, initialQuestion)
+        }
+    }, [initialQuestion])
+
+    const handleSubmit = async (e?: React.FormEvent, questionText?: string) => {
+        e?.preventDefault()
+        const messageText = questionText || input
+        if (!messageText.trim() || isLoading) return
 
         const userMessage: ChatMessage = {
             role: 'user',
-            content: input.trim()
+            content: messageText.trim()
         }
 
         setMessages(prev => [...prev, userMessage])
@@ -111,8 +124,8 @@ export default function ChatInterface() {
                     >
                         <div
                             className={`max-w-[80%] rounded-lg ${message.role === 'user'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-gray-100 text-gray-800'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 text-gray-800'
                                 } p-4`}
                         >
                             {message.role === 'assistant' ? (

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -17,9 +18,12 @@ export default function Home() {
               政治や選挙について詳しくなくても大丈夫。
               一緒に考えながら、あなたの声を届けましょう。
             </p>
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition-colors">
+            <Link
+              href="/chat"
+              className="inline-block bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition-colors"
+            >
               はじめる
-            </button>
+            </Link>
           </div>
           <div className="p-6 border rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">選挙について知る</h2>
@@ -27,9 +31,12 @@ export default function Home() {
               選挙の仕組みや投票方法について、
               わかりやすく解説しています。
             </p>
-            <button className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors">
+            <Link
+              href="/chat?q=選挙の仕組みについて教えてください"
+              className="inline-block bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors"
+            >
               詳しく見る
-            </button>
+            </Link>
           </div>
         </div>
       </div>
